@@ -1,3 +1,6 @@
+using System.Globalization;
+using IonicCurrencyExchange.Dto;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,28 +20,27 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/exchangeratedata", async () =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
+
+        // TODO: move api request (to a controller?)
+        using var client = new HttpClient();
+        string url = "https://api.fxratesapi.com/latest";
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return Results.Problem(
+                detail: $"Error: {response.StatusCode}",
+                statusCode: 500,
+                title: "Internal Server Error"
+            );
+        }
+
+        var content = await response.Content.ReadFromJsonAsync<FxRatesDto>();
+
+        return Results.Ok(content);
     })
-    .WithName("GetWeatherForecast");
+    .WithName("GetExchangeRateData");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

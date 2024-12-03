@@ -9,12 +9,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppService {
 
-  baseApiUrl = 'https://api.fxratesapi.com/';
+  // baseApiUrl = 'https://api.fxratesapi.com/';
+  baseApiUrl = 'http://localhost:5024'
   constructor(private http: HttpClient) {
 
   }
 
    getCurrencies(): Observable<ApiCurrencyResponse> {
-    return this.http.get<ApiCurrencyResponse>(`${this.baseApiUrl}/latest`);
+    return this.http.get<ApiCurrencyResponse>(`${this.baseApiUrl}/exchangeratedata`);
    }
 }
