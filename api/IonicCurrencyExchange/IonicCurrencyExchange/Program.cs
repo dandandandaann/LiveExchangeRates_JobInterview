@@ -1,5 +1,6 @@
 using System.Globalization;
 using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,31 +25,33 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("AllowLocalhost");
-
 }
 
 app.UseHttpsRedirection();
 
 app.MapGet("/exchangeratedata", async () =>
     {
-
         // TODO: move api request (to a controller?)
         using var client = new HttpClient();
-        string url = "https://api.fxratesapi.com/latest";
+        const string url = "https://api.fxratesapi.com/latest";
         HttpResponseMessage response = await client.GetAsync(url);
 
-        if (!response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode ||
+            await response.Content.ReadFromJsonAsync<FxRatesDto>() is not FxRatesDto content) // TODO: better error handling?
         {
             return Results.Problem(
-                detail: $"Error: {response.StatusCode}",
+                detail: $"Status code: {response.StatusCode}",
                 statusCode: 500,
                 title: "Internal Server Error"
             );
         }
 
-        var content = await response.Content.ReadFromJsonAsync<FxRatesDto>();
-
-        return Results.Ok(content);
+        var result = new ExchangeRates(
+            content.timestamp,
+            content.@base,
+            content.rates
+        );
+        return Results.Ok(result);
     })
     .WithName("GetExchangeRateData");
 

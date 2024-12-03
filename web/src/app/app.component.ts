@@ -20,7 +20,7 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    this.apiService.getCurrencies().pipe(map(x => {return x /* map incoming data for display */})) // TODO: move this data mapping to the backend
+    this.apiService.getCurrencies()
     .subscribe(
       (response) => {
         console.log(response);
