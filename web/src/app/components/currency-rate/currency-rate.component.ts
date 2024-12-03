@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-currency-rate',
@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './currency-rate.component.scss'
 })
 export class CurrencyRateComponent {
-
+  @Input() currency!: string;
+  @Input() rate!: number;
 }

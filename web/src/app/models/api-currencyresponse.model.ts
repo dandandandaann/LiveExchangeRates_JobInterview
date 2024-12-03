@@ -1,5 +1,5 @@
 export interface ApiCurrencyResponse {
     timestamp: number;
-    exchangePair: string;
+    currencyPair: string;
     rates: Record<string, number>;
 }

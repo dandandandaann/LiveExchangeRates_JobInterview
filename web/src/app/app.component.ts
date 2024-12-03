@@ -3,12 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { AppService } from './app.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { map } from 'rxjs';
+import { CurrencyRateComponent } from "./components/currency-rate/currency-rate.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HttpClientModule], // TODO: try to remove HttpClientModule, it might not be needed
+  imports: [RouterOutlet, CommonModule, HttpClientModule, CurrencyRateComponent], // TODO: try to remove HttpClientModule, it might not be needed
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -18,13 +18,19 @@ export class AppComponent {
   constructor(private apiService: AppService) {
 
   }
-
+  exchangeRates: any = null;
   ngOnInit(): void {
     this.apiService.getCurrencies()
-    .subscribe(
-      (response) => {
-        console.log(response);
-      }
-    );
+      .subscribe(
+        (response) => {
+          console.log(response.currencyPair);
+          this.exchangeRates = Object.entries(response.rates)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3)
+            .map(([currency, value]) => ({currency: `${response.currencyPair} / ${currency}`, value}))
+
+          return response;
+        }
+      );
   }
 }
