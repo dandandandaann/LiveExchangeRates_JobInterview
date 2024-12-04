@@ -11,20 +11,20 @@ using Moq.Protected;
 
 namespace UnitTest;
 
-public class FxRatesFetchTests
+public class FxRatesFetchServiceTests
 {
-    private readonly Mock<ILogger<FxRatesFetch>> _mockLogger;
+    private readonly Mock<ILogger<FxRatesFetchService>> _mockLogger;
     private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
     private readonly ExchangeRatesCache _exchangeRatesCache;
-    private readonly FxRatesFetch _fxRatesFetch;
+    private readonly FxRatesFetchService _fxRatesFetchService;
 
-    public FxRatesFetchTests()
+    public FxRatesFetchServiceTests()
     {
-        _mockLogger = new Mock<ILogger<FxRatesFetch>>();
+        _mockLogger = new Mock<ILogger<FxRatesFetchService>>();
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
         _exchangeRatesCache = new ExchangeRatesCache(new MemoryCache(new MemoryCacheOptions()));
 
-        _fxRatesFetch = new FxRatesFetch(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache);
+        _fxRatesFetchService = new FxRatesFetchService(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class FxRatesFetchTests
         _mockHttpClientFactory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
 
         // Act
-        await _fxRatesFetch.StartAsync(CancellationToken.None);
+        await _fxRatesFetchService.StartAsync(CancellationToken.None);
         await Task.Delay(100); // Give some time for the timer to tick
 
         // Assert
@@ -81,7 +81,7 @@ public class FxRatesFetchTests
         _mockHttpClientFactory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
 
         // Act
-        await _fxRatesFetch.StartAsync(CancellationToken.None);
+        await _fxRatesFetchService.StartAsync(CancellationToken.None);
         await Task.Delay(100); // Give some time for the timer to tick
 
         // Assert
@@ -115,7 +115,7 @@ public class FxRatesFetchTests
         _mockHttpClientFactory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(client);
 
         // Act
-        await _fxRatesFetch.StartAsync(CancellationToken.None);
+        await _fxRatesFetchService.StartAsync(CancellationToken.None);
         await Task.Delay(100); // Give some time for the timer to tick
 
         // Assert
@@ -132,7 +132,7 @@ public class FxRatesFetchTests
     public async Task StartAsync_ShouldInitializeTimer()
     {
         // Act
-        await _fxRatesFetch.StartAsync(CancellationToken.None);
+        await _fxRatesFetchService.StartAsync(CancellationToken.None);
 
         // Assert
         // Internal behavior (timer setup) isn't directly verifiable externally.
@@ -142,11 +142,11 @@ public class FxRatesFetchTests
     public async Task StopAsync_ShouldDisableTimer()
     {
         // Arrange
-        await _fxRatesFetch.StartAsync(CancellationToken.None);
+        await _fxRatesFetchService.StartAsync(CancellationToken.None);
 
         // Act
-        await _fxRatesFetch.StopAsync(CancellationToken.None);
-        _fxRatesFetch.Dispose();
+        await _fxRatesFetchService.StopAsync(CancellationToken.None);
+        _fxRatesFetchService.Dispose();
 
         // Assert
         // If desired, further checks on timer status might require exposing internal state or properties.

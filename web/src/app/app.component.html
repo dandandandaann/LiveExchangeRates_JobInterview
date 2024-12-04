@@ -1,9 +1,10 @@
 <main class="main">
   <div class="content">
+    <app-currency-search (searchCurrencies)="onSearchCurrencies($event)"></app-currency-search>
     <div class="currency-rates">
       <app-currency-rate
         *ngFor="let rate of exchangeRates"
-        [currency]="rate.currency" [rate]="rate.value">
+        [currency]="rate.currency" [rate]="rate.value" [trend]="rate.trend">
       </app-currency-rate>
     </div>
   </div>

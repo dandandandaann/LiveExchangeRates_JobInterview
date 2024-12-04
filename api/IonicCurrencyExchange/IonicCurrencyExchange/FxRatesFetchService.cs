@@ -2,10 +2,10 @@
 
 namespace IonicCurrencyExchange;
 
-public class FxRatesFetch(ILogger<FxRatesFetch> logger, IHttpClientFactory httpClientFactory, ExchangeRatesCache cache) : IHostedService
+public class FxRatesFetchService(ILogger<FxRatesFetchService> logger, IHttpClientFactory httpClientFactory, ExchangeRatesCache cache) : IHostedService
 {
     private Timer? _timer;
-    private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(30);
+    private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(60);
 
     public Task StartAsync(CancellationToken cancellationToken)
     {

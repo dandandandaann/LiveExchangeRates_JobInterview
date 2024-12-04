@@ -1,4 +1,4 @@
 <div class="currency-rate">
-    <h3>{{ currency }}</h3>
-    <p>{{ rate }}</p>
+    <span>{{ currency }} {{ trend }}</span>
+    <span [ngClass]="trend">{{ rate }}</span>
 </div>

@@ -1,0 +1,45 @@
+.currency-search {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    flex-wrap: wrap;
+
+    input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 5px;
+      font-size: 1em;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tag {
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+
+      button {
+        background: none;
+        border: none;
+        margin-left: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}

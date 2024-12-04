@@ -1,9 +1,25 @@
 .currency-rate {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    margin: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 80px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin: 10px;
+  font-family: 'Courier New', 'Roboto Mono';
+  font-size: 1.2em;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  .⇧ {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  .⇩ {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+  }
 }

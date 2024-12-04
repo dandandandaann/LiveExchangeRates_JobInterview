@@ -1,0 +1,18 @@
+<div class="currency-search">
+  <div class="input-container">
+    <div class="tags">
+      <span *ngFor="let currency of currencies" class="tag">
+        {{ currency }}
+        <button type="button" (click)="removeCurrency(currency)">x</button>
+      </span>
+      <input
+        type="text"
+        placeholder="Enter currency"
+        [(ngModel)]="inputValue"
+        (input)="onInputChange($event)"
+        (keyup)="onKeyup($event)"
+        maxlength="3"
+      />
+    </div>
+  </div>
+</div>

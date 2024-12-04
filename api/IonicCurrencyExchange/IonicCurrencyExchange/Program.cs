@@ -18,7 +18,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ExchangeRatesCache>();
 
-builder.Services.AddHostedService<FxRatesFetch>();
+builder.Services.AddHostedService<FxRatesFetchService>();
 
 var app = builder.Build();
 
