@@ -23,7 +23,6 @@ export class AppComponent {
     this.apiService.getCurrencies()
       .subscribe(
         (response) => {
-          console.log(response.currencyPair);
           this.exchangeRates = Object.entries(response.rates)
             // .sort(() => Math.random() - 0.5)
             .slice(0, 3)
