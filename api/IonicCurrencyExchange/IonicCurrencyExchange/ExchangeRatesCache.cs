@@ -5,9 +5,8 @@ namespace IonicCurrencyExchange;
 
 public class ExchangeRatesCache(IMemoryCache cache)
 {
-
     // TODO: move this somewhere else? Or populate on the go?
-    public static ImmutableArray<string> AvailableCurrencies =
+    public ImmutableArray<string> AvailableCurrencies =
     [
         "ADA", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARB", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN",
         "BHD", "BIF", "BMD", "BNB", "BND", "BOB", "BRL", "BSD", "BTC", "BTN", "BWP", "BYN", "BYR", "BZD", "CAD", "CDF",
@@ -23,6 +22,9 @@ public class ExchangeRatesCache(IMemoryCache cache)
         "ZAR", "ZMK", "ZMW", "ZWL"
     ];
 
+    public string CurrencyPair => "USD";
+    public long LastTimeStamp { get; set; }
+
     public double GetValue(string key)
     {
         if (!cache.TryGetValue(key, out double cachedRate))
@@ -34,5 +36,15 @@ public class ExchangeRatesCache(IMemoryCache cache)
     public void SetValue(string key, double rate)
     {
         cache.Set(key, rate, TimeSpan.FromMinutes(2));
+    }
+
+    public Dictionary<string, double> GetAllRates()
+    {
+        var rates = new Dictionary<string, double>();
+        foreach (var currency in AvailableCurrencies)
+        {
+            rates.Add(currency, GetValue(currency));
+        }
+        return rates;
     }
 }

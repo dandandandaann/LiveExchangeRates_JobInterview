@@ -25,7 +25,7 @@ export class AppComponent {
         (response) => {
           console.log(response.currencyPair);
           this.exchangeRates = Object.entries(response.rates)
-            .sort(() => Math.random() - 0.5)
+            // .sort(() => Math.random() - 0.5)
             .slice(0, 3)
             .map(([currency, value]) => ({currency: `${response.currencyPair} / ${currency}`, value}))
 
