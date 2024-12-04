@@ -1,4 +1,4 @@
-using System.Globalization;
+using IonicCurrencyExchange;
 using IonicCurrencyExchange.Dto;
 using IonicCurrencyExchange.Model;
 
@@ -16,6 +16,10 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ExchangeRatesCache>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,10 +30,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors("AllowLocalhost");
 }
-
 app.UseHttpsRedirection();
 
-app.MapGet("/exchangeratedata", async () =>
+app.MapGet("/exchangeratedata", async (ExchangeRatesCache cache) =>
     {
         // TODO: move api request (to a controller?)
         using var client = new HttpClient();
@@ -46,11 +49,22 @@ app.MapGet("/exchangeratedata", async () =>
             );
         }
 
+        foreach (var rate in content.rates)
+        {
+            cache.SetValue(rate.Key, rate.Value);
+        }
+
         var result = new ExchangeRates(
             content.timestamp,
             content.@base,
-            content.rates
+            new Dictionary<string, double>()
         );
+
+        foreach (var currency in ExchangeRatesCache.AvailableCurrencies)
+        {
+            result.Rates.Add(currency, cache.GetValue(currency));
+        }
+
         return Results.Ok(result);
     })
     .WithName("GetExchangeRateData");
