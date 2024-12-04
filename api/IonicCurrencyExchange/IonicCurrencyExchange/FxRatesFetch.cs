@@ -29,21 +29,17 @@ public class FxRatesFetch(ILogger<FxRatesFetch> logger, IHttpClientFactory httpC
                 logger.LogError("Failed to fetch data from API. Status code: {StatusCode}", response.StatusCode);
                 return;
             }
-            if (await response.Content.ReadFromJsonAsync<FxRatesDto>() is not { } content)
-            {
-                var data = await response.Content.ReadAsStringAsync();
-                logger.LogError("Failed to parse fetched data from API. Data: {data}", data);
-                return;
-            }
+
+            var content = await response.Content.ReadFromJsonAsync<FxRatesDto>();
 
             logger.LogInformation("Successfully fetched data from API.");
 
-            foreach (var rate in content.rates)
+            foreach (var rate in content!.Rates)
             {
                 cache.SetValue(rate.Key, rate.Value);
             }
 
-            cache.LastTimeStamp = content.timestamp;
+            cache.LastTimestamp = content.Timestamp;
         }
         catch (Exception ex)
         {

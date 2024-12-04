@@ -1,14 +1,13 @@
-﻿using System.Collections.Immutable;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace IonicCurrencyExchange;
 
 public class ExchangeRatesCache(IMemoryCache cache)
 {
-    public readonly HashSet<string> AvailableCurrencies = new HashSet<string>();
+    public readonly HashSet<string> AvailableCurrencies = new();
 
     public string CurrencyPair => "USD";
-    public long LastTimeStamp { get; set; }
+    public long LastTimestamp { get; set; }
 
     public double GetValue(string key)
     {

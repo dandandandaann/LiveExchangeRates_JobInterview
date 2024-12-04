@@ -1,6 +1,5 @@
 using IonicCurrencyExchange;
 using IonicCurrencyExchange.Dto;
-using IonicCurrencyExchange.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +35,7 @@ app.MapGet("/exchangeratedata", (ExchangeRatesCache cache) =>
     {
         var rates = cache.GetAllRates();
         var result = new ExchangeRates(
-            cache.LastTimeStamp,
+            cache.LastTimestamp,
             cache.CurrencyPair,
             rates
         );

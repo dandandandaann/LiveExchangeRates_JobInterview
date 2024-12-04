@@ -1,4 +1,4 @@
-﻿namespace IonicCurrencyExchange.Model;
+﻿namespace IonicCurrencyExchange.Dto;
 
 public record ExchangeRates(
     long Timestamp,
