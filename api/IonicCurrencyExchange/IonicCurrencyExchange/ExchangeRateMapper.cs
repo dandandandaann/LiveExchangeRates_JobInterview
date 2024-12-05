@@ -1,8 +1,9 @@
 using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Services.Cache;
 
 namespace IonicCurrencyExchange;
 
-public class ExchangeRateMapper(ExchangeRatesCache cache)
+public class ExchangeRateMapper(IExchangeRatesCache cache)
 {
     public ExchangeRates FromCache()
     {

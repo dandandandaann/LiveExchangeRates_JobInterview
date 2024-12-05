@@ -1,7 +1,6 @@
-﻿using IonicCurrencyExchange.Dto;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
-namespace IonicCurrencyExchange;
+namespace IonicCurrencyExchange.Services.SignalR;
 
 public class ExchangeRatesHub(ExchangeRateMapper mapper) : Hub
 {

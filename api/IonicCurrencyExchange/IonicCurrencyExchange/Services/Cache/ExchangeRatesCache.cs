@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace IonicCurrencyExchange;
+namespace IonicCurrencyExchange.Services.Cache;
 
-public class ExchangeRatesCache(IMemoryCache cache)
+public class ExchangeRatesCache(IMemoryCache cache): IExchangeRatesCache
 {
-    public readonly HashSet<string> AvailableCurrencies = new();
-
+    public HashSet<string> AvailableCurrencies { get; } = new();
     public string CurrencyPair => "USD";
     public long LastTimestamp { get; set; }
 

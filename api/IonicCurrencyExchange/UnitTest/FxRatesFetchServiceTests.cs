@@ -4,6 +4,9 @@ using System.Text;
 using FluentAssertions;
 using IonicCurrencyExchange;
 using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Services.Cache;
+using IonicCurrencyExchange.Services.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -17,14 +20,18 @@ public class FxRatesFetchServiceTests
     private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
     private readonly ExchangeRatesCache _exchangeRatesCache;
     private readonly FxRatesFetchService _fxRatesFetchService;
+    private readonly Mock<IHubContext<ExchangeRatesHub>> _mockHubContext;
+    private readonly Mock<ExchangeRateMapper> _mockMapper;
 
     public FxRatesFetchServiceTests()
     {
         _mockLogger = new Mock<ILogger<FxRatesFetchService>>();
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
         _exchangeRatesCache = new ExchangeRatesCache(new MemoryCache(new MemoryCacheOptions()));
+        _mockHubContext = new Mock<IHubContext<ExchangeRatesHub>>();
+        _mockMapper = new Mock<ExchangeRateMapper>(_exchangeRatesCache);
 
-        _fxRatesFetchService = new FxRatesFetchService(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache, null, null); // TODO: fix test
+        _fxRatesFetchService = new FxRatesFetchService(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache, _mockHubContext.Object, _mockMapper.Object);
     }
 
     [Fact]

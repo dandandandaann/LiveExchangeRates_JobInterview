@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using IonicCurrencyExchange;
+using IonicCurrencyExchange.Services.Cache;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace UnitTest;

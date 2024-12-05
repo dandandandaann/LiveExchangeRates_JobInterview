@@ -1,4 +1,6 @@
 ﻿using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Services.Cache;
+using IonicCurrencyExchange.Services.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
 namespace IonicCurrencyExchange;
@@ -6,7 +8,7 @@ namespace IonicCurrencyExchange;
 public class FxRatesFetchService(
     ILogger<FxRatesFetchService> logger,
     IHttpClientFactory httpClientFactory,
-    ExchangeRatesCache cache,
+    IExchangeRatesCache cache,
     IHubContext<ExchangeRatesHub> hubContext,
     ExchangeRateMapper mapper) : IHostedService
 {

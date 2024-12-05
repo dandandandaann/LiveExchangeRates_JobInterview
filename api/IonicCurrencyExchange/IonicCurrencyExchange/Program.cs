@@ -1,5 +1,7 @@
 using IonicCurrencyExchange;
 using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Services.Cache;
+using IonicCurrencyExchange.Services.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +20,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<ExchangeRatesCache>();
+builder.Services.AddSingleton<IExchangeRatesCache, ExchangeRatesCache>();
 builder.Services.AddSingleton<ExchangeRateMapper>();
 
 builder.Services.AddHostedService<FxRatesFetchService>();
