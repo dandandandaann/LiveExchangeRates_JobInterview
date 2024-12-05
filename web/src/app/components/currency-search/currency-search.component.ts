@@ -22,7 +22,6 @@ export class CurrencySearchComponent {
   }
 
   onKeyup(event: KeyboardEvent): void {
-    console.log('onKeyup', event.key);
     if (event.key === 'Enter') {
       this.addCurrencies(this.inputValue);
     } else if (event.key === 'Backspace' && this.inputValue === '') {

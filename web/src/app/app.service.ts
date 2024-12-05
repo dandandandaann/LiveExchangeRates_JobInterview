@@ -14,7 +14,7 @@ export class AppService {
 
   }
 
-   getCurrencies(): Observable<ApiCurrencyResponse> {
+  getCurrencies(): Observable<ApiCurrencyResponse> {
     return this.http.get<ApiCurrencyResponse>(`${this.baseApiUrl}/exchangeratedata`);
-   }
+  }
 }

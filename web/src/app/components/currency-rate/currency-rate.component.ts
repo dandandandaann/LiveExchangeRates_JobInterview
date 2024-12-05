@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CurrencyRateComponent {
   @Input() currency!: string;
+  @Input() currencyPair!: string;
   @Input() rate!: number;
   @Input() trend!: string;
 }

@@ -1,0 +1,8 @@
+<div class="rates-panel">
+    <app-currency-search (searchCurrencies)="onSearchCurrencies($event)"></app-currency-search>
+    <div class="currency-rates">
+        <app-currency-rate *ngFor="let rate of outputExchangeRates" [currency]="rate.currency" [currencyPair]="rate.currencyPair" [rate]="rate.value" [trend]="rate.trend">
+            [trend]="rate.trend">
+        </app-currency-rate>
+    </div>
+</div>
