@@ -22,7 +22,6 @@ export class ExchangeRatesPanelComponent {
     if (this.inputExchangeRates) {
       this.updateCurrencyRates();
     }
-    else console.error('inputExchangeRates is not defined');
   }
 
   onSearchCurrencies(currencies: string[]): void {
@@ -31,11 +30,6 @@ export class ExchangeRatesPanelComponent {
   }
 
   private updateCurrencyRates(): void {
-    if (!this.inputExchangeRates || !this.inputExchangeRates.rates) {
-      console.error('inputExchangeRates is not defined');
-      return;
-    }
-
     const newRates = Object.entries(this.inputExchangeRates.rates)
       .map(([currency, value]) => {
         const previousRate = this.previousExchangeRates?.find((rate: any) => rate.currency === currency);

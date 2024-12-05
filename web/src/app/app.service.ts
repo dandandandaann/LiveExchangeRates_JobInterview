@@ -31,7 +31,6 @@ export class AppService {
   private addTransferExchangeRateDataListener() {
     this.hubConnection.on('transferExchangeRateData', (data: ApiCurrencyResponse) => {
       this.exchangeRateDataSubject.next(data);
-      console.log('message received');
     });
   }
 

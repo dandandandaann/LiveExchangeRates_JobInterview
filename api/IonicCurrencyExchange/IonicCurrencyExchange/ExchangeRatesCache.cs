@@ -19,7 +19,7 @@ public class ExchangeRatesCache(IMemoryCache cache)
 
     public void SetValue(string key, double rate)
     {
-        cache.Set(key, rate, TimeSpan.FromMinutes(2));
+        cache.Set(key, rate);
         AvailableCurrencies.Add(key);
     }
 

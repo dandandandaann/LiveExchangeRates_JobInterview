@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ExchangeRatesCache>();
+builder.Services.AddSingleton<ExchangeRateMapper>();
 
 builder.Services.AddHostedService<FxRatesFetchService>();
 

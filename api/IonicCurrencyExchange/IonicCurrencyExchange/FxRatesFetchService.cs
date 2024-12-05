@@ -7,10 +7,11 @@ public class FxRatesFetchService(
     ILogger<FxRatesFetchService> logger,
     IHttpClientFactory httpClientFactory,
     ExchangeRatesCache cache,
-    IHubContext<ExchangeRatesHub> hubContext) : IHostedService
+    IHubContext<ExchangeRatesHub> hubContext,
+    ExchangeRateMapper mapper) : IHostedService
 {
     private Timer? _timer;
-    private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(60);
+    private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(30);
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -56,14 +57,10 @@ public class FxRatesFetchService(
 
     async Task SendHubData()
     {
-        var rates = cache.GetAllRates();
-        var result = new ExchangeRates(
-            cache.LastTimestamp,
-            cache.CurrencyPair,
-            rates
-        );
+        ExchangeRates result = mapper.FromCache();
         // Send the data to connected clients
         await hubContext.Clients.All.SendAsync("transferExchangeRateData", result);
+
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

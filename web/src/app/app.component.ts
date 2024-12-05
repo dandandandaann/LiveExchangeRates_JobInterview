@@ -29,16 +29,6 @@ export class AppComponent implements OnInit {
         console.error('Error receiving exchange rate data:', error);
       }
     );
-    this.intervalId = setInterval(() => {
-      this.appService.getExchangeRateData().subscribe(
-        (data: ApiCurrencyResponse) => {
-          this.exchangeRates = data;
-        },
-        (error) => {
-          console.error('Error receiving exchange rate data:', error);
-        }
-      );
-    }, 10000);
   }
 
   ngOnDestroy(): void {
