@@ -5,6 +5,14 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace IonicCurrencyExchange;
 
+/// <summary>
+/// Service to fetch exchange rates periodically from fxratesapi and update the cache and connected clients.
+/// </summary>
+/// <param name="logger">The logger instance for logging information and errors.</param>
+/// <param name="httpClientFactory">The factory to create HTTP clients for making API requests.</param>
+/// <param name="cache">The cache to store the fetched exchange rates.</param>
+/// <param name="hubContext">The SignalR hub context to send data to connected clients.</param>
+/// <param name="mapper">The mapper to convert cache data to DTOs.</param>
 public class FxRatesFetchService(
     ILogger<FxRatesFetchService> logger,
     IHttpClientFactory httpClientFactory,
@@ -59,7 +67,7 @@ public class FxRatesFetchService(
 
     async Task SendHubData()
     {
-        ExchangeRates result = mapper.FromCache();
+        ExchangeRatesDto result = mapper.FromCache();
         // Send the data to connected clients
         await hubContext.Clients.All.SendAsync("transferExchangeRateData", result);
 

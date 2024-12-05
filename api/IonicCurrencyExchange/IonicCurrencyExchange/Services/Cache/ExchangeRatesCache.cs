@@ -2,10 +2,12 @@
 
 namespace IonicCurrencyExchange.Services.Cache;
 
-public class ExchangeRatesCache(IMemoryCache cache): IExchangeRatesCache
+public class ExchangeRatesCache(IMemoryCache cache) : IExchangeRatesCache
 {
     public HashSet<string> AvailableCurrencies { get; } = new();
+
     public string CurrencyPair => "USD";
+
     public long LastTimestamp { get; set; }
 
     public double GetValue(string key)

@@ -43,7 +43,7 @@ app.MapHub<ExchangeRatesHub>("/exchangerateshub");
 app.MapGet("/exchangeratedata", (ExchangeRatesCache cache) =>
     {
         var rates = cache.GetAllRates();
-        var result = new ExchangeRates(
+        var result = new ExchangeRatesDto(
             cache.LastTimestamp,
             cache.CurrencyPair,
             rates

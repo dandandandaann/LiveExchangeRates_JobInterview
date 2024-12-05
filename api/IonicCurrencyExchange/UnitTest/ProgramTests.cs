@@ -24,7 +24,7 @@
 //         // Assert
 //         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
 //
-//         var exchangeRates = await response.Content.ReadFromJsonAsync<ExchangeRates>();
+//         var exchangeRates = await response.Content.ReadFromJsonAsync<ExchangeRatesDto>();
 //
 //         exchangeRates.Should().NotBeNull();
 //         exchangeRates!.Rates.Should().NotBeEmpty();
