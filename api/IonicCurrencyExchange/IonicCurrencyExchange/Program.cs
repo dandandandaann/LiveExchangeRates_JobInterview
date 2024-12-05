@@ -1,5 +1,6 @@
 using IonicCurrencyExchange;
 using IonicCurrencyExchange.Dto;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhost",
         policy => policy.WithOrigins("http://localhost:4200") // Angular app
             .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
 
 builder.Services.AddHttpClient();
@@ -19,6 +21,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ExchangeRatesCache>();
 
 builder.Services.AddHostedService<FxRatesFetchService>();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -30,6 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors("AllowLocalhost");
 }
+
+app.MapHub<ExchangeRatesHub>("/exchangerateshub");
 
 app.MapGet("/exchangeratedata", (ExchangeRatesCache cache) =>
     {

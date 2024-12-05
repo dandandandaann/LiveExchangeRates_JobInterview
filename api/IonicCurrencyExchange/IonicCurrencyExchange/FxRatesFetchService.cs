@@ -1,8 +1,13 @@
 ﻿using IonicCurrencyExchange.Dto;
+using Microsoft.AspNetCore.SignalR;
 
 namespace IonicCurrencyExchange;
 
-public class FxRatesFetchService(ILogger<FxRatesFetchService> logger, IHttpClientFactory httpClientFactory, ExchangeRatesCache cache) : IHostedService
+public class FxRatesFetchService(
+    ILogger<FxRatesFetchService> logger,
+    IHttpClientFactory httpClientFactory,
+    ExchangeRatesCache cache,
+    IHubContext<ExchangeRatesHub> hubContext) : IHostedService
 {
     private Timer? _timer;
     private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(60);
@@ -40,11 +45,25 @@ public class FxRatesFetchService(ILogger<FxRatesFetchService> logger, IHttpClien
             }
 
             cache.LastTimestamp = content.Timestamp;
+
+            await SendHubData();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while fetching new exchange rates.");
         }
+    }
+
+    async Task SendHubData()
+    {
+        var rates = cache.GetAllRates();
+        var result = new ExchangeRates(
+            cache.LastTimestamp,
+            cache.CurrencyPair,
+            rates
+        );
+        // Send the data to connected clients
+        await hubContext.Clients.All.SendAsync("transferExchangeRateData", result);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

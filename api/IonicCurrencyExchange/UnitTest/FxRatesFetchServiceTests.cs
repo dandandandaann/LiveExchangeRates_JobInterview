@@ -24,7 +24,7 @@ public class FxRatesFetchServiceTests
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
         _exchangeRatesCache = new ExchangeRatesCache(new MemoryCache(new MemoryCacheOptions()));
 
-        _fxRatesFetchService = new FxRatesFetchService(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache);
+        _fxRatesFetchService = new FxRatesFetchService(_mockLogger.Object, _mockHttpClientFactory.Object, _exchangeRatesCache, null); // TODO: fix test
     }
 
     [Fact]
