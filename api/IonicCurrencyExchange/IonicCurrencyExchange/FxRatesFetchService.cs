@@ -1,4 +1,5 @@
 ﻿using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Mappers;
 using IonicCurrencyExchange.Services.Cache;
 using IonicCurrencyExchange.Services.SignalR;
 using Microsoft.AspNetCore.SignalR;
@@ -18,7 +19,7 @@ public class FxRatesFetchService(
     IHttpClientFactory httpClientFactory,
     IExchangeRatesCache cache,
     IHubContext<ExchangeRatesHub> hubContext,
-    ExchangeRateMapper mapper) : IHostedService
+    IExchangeRateMapper mapper) : IHostedService
 {
     private Timer? _timer;
     private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(30);

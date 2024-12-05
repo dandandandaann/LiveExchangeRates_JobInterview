@@ -1,8 +1,7 @@
 using IonicCurrencyExchange;
-using IonicCurrencyExchange.Dto;
+using IonicCurrencyExchange.Mappers;
 using IonicCurrencyExchange.Services.Cache;
 using IonicCurrencyExchange.Services.SignalR;
-using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +20,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IExchangeRatesCache, ExchangeRatesCache>();
-builder.Services.AddSingleton<ExchangeRateMapper>();
+builder.Services.AddSingleton<IExchangeRateMapper, ExchangeRateMapper>();
 
 builder.Services.AddHostedService<FxRatesFetchService>();
 
@@ -39,18 +38,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHub<ExchangeRatesHub>("/exchangerateshub");
-
-app.MapGet("/exchangeratedata", (ExchangeRatesCache cache) =>
-    {
-        var rates = cache.GetAllRates();
-        var result = new ExchangeRatesDto(
-            cache.LastTimestamp,
-            cache.CurrencyPair,
-            rates
-        );
-
-        return Results.Ok(result);
-    })
-    .WithName("GetExchangeRateData");
 
 app.Run();

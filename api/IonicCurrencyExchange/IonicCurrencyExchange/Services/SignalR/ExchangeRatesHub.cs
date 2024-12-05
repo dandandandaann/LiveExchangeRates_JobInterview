@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using IonicCurrencyExchange.Mappers;
+using Microsoft.AspNetCore.SignalR;
 
 namespace IonicCurrencyExchange.Services.SignalR;
 
@@ -6,7 +7,7 @@ namespace IonicCurrencyExchange.Services.SignalR;
 /// Represents a SignalR hub for managing exchange rate data communication.
 /// </summary>
 /// <param name="mapper">An instance of <see cref="ExchangeRateMapper"/> used to map exchange rate data from cache.</param>
-public class ExchangeRatesHub(ExchangeRateMapper mapper) : Hub
+public class ExchangeRatesHub(IExchangeRateMapper mapper) : Hub
 {
     /// <summary>
     /// Called when a new connection is established with the hub.

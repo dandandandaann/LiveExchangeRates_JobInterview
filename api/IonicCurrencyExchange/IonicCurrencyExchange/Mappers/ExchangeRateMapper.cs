@@ -1,13 +1,13 @@
 using IonicCurrencyExchange.Dto;
 using IonicCurrencyExchange.Services.Cache;
 
-namespace IonicCurrencyExchange;
+namespace IonicCurrencyExchange.Mappers;
 
 /// <summary>
 /// Represents a mapper for exchange rates that retrieves data from a cache.
 /// </summary>
 /// <param name="cache">The cache that stores exchange rates.</param>
-public class ExchangeRateMapper(IExchangeRatesCache cache)
+public class ExchangeRateMapper(IExchangeRatesCache cache): IExchangeRateMapper
 {
     /// <summary>
     /// Retrieves exchange rates from the cache.
