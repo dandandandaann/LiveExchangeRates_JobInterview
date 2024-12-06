@@ -1,10 +1,8 @@
 ﻿using IonicCurrencyExchange.Dto;
-using IonicCurrencyExchange.Mappers;
 using IonicCurrencyExchange.Services.Cache;
 using IonicCurrencyExchange.Services.SignalR;
-using Microsoft.AspNetCore.SignalR;
 
-namespace IonicCurrencyExchange;
+namespace IonicCurrencyExchange.Services.FxRatesWorker;
 
 /// <summary>
 /// Service to fetch exchange rates periodically from fxratesapi and update the cache and connected clients.
@@ -12,14 +10,12 @@ namespace IonicCurrencyExchange;
 /// <param name="logger">The logger instance for logging information and errors.</param>
 /// <param name="httpClientFactory">The factory to create HTTP clients for making API requests.</param>
 /// <param name="cache">The cache to store the fetched exchange rates.</param>
-/// <param name="hubContext">The SignalR hub context to send data to connected clients.</param>
-/// <param name="mapper">The mapper to convert cache data to DTOs.</param>
+/// <param name="clientUpdater">The client updater responsible for sending the updated exchange rates to connected clients.</param>
 public class FxRatesFetchService(
     ILogger<FxRatesFetchService> logger,
     IHttpClientFactory httpClientFactory,
     IExchangeRatesCache cache,
-    IHubContext<ExchangeRatesHub> hubContext,
-    IExchangeRateMapper mapper) : IHostedService
+    IClientUpdater clientUpdater) : IHostedService
 {
     private Timer? _timer;
     private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(30);
@@ -58,20 +54,12 @@ public class FxRatesFetchService(
 
             cache.LastTimestamp = content.Timestamp;
 
-            await SendHubData();
+            await clientUpdater.SendExchangeRates();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while fetching new exchange rates.");
         }
-    }
-
-    async Task SendHubData()
-    {
-        ExchangeRatesDto result = mapper.FromCache();
-        // Send the data to connected clients
-        await hubContext.Clients.All.SendAsync("transferExchangeRateData", result);
-
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
