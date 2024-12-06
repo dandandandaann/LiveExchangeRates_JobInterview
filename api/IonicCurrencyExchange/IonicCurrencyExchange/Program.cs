@@ -1,6 +1,6 @@
-using IonicCurrencyExchange;
 using IonicCurrencyExchange.Mappers;
 using IonicCurrencyExchange.Services.Cache;
+using IonicCurrencyExchange.Services.ClientUpdater;
 using IonicCurrencyExchange.Services.FxRatesWorker;
 using IonicCurrencyExchange.Services.RabbitMq;
 using IonicCurrencyExchange.Services.SignalR;
@@ -21,14 +21,14 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+builder.Services.AddSignalR();
+
 builder.Services.AddSingleton<IExchangeRatesCache, ExchangeRatesCache>();
 builder.Services.AddSingleton<IExchangeRateMapper, ExchangeRateMapper>();
 builder.Services.AddSingleton<IClientUpdater, ClientUpdater>();
-
+builder.Services.AddSingleton<IRabbitMqSetup, RabbitMqSetup>();
 builder.Services.AddHostedService<FxRatesFetchService>();
-
-builder.Services.AddSignalR();
-builder.Services.AddSingleton<RabbitMqService>();
+builder.Services.AddHostedService<ClientUpdater>();
 
 var app = builder.Build();
 

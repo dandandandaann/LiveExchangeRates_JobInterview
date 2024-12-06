@@ -1,6 +1,6 @@
 ﻿using IonicCurrencyExchange.Dto;
 using IonicCurrencyExchange.Services.Cache;
-using IonicCurrencyExchange.Services.SignalR;
+using IonicCurrencyExchange.Services.RabbitMq;
 
 namespace IonicCurrencyExchange.Services.FxRatesWorker;
 
@@ -10,12 +10,12 @@ namespace IonicCurrencyExchange.Services.FxRatesWorker;
 /// <param name="logger">The logger instance for logging information and errors.</param>
 /// <param name="httpClientFactory">The factory to create HTTP clients for making API requests.</param>
 /// <param name="cache">The cache to store the fetched exchange rates.</param>
-/// <param name="clientUpdater">The client updater responsible for sending the updated exchange rates to connected clients.</param>
+/// <param name="rabbitMqSetup">The service responsible for managing operations and connections with RabbitMQ.</param>
 public class FxRatesFetchService(
     ILogger<FxRatesFetchService> logger,
     IHttpClientFactory httpClientFactory,
     IExchangeRatesCache cache,
-    IClientUpdater clientUpdater) : IHostedService
+    IRabbitMqSetup rabbitMqSetup) : IHostedService
 {
     private Timer? _timer;
     private readonly TimeSpan _repeatInterval = TimeSpan.FromSeconds(30);
@@ -27,6 +27,11 @@ public class FxRatesFetchService(
         return Task.CompletedTask;
     }
 
+   /// <summary>
+    /// Periodically fetches the latest foreign exchange rates from an external API,
+    /// updates the cache with the new rates, and publishes a message to RabbitMQ.
+    /// </summary>
+    /// <param name="state"></param>
     private async void DoWork(object? state)
     {
         try
@@ -54,7 +59,8 @@ public class FxRatesFetchService(
 
             cache.LastTimestamp = content.Timestamp;
 
-            await clientUpdater.SendExchangeRates();
+            rabbitMqSetup.Publish("Fetch completed", "exchangeRatesQueue");
+            logger.LogInformation("Published exchange rates to RabbitMQ.");
         }
         catch (Exception ex)
         {
