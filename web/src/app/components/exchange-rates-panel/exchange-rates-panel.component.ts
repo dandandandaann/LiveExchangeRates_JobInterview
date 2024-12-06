@@ -40,8 +40,15 @@ export class ExchangeRatesPanelComponent {
 
 
     this.previousExchangeRates = newRates;
-    this.outputExchangeRates = newRates
-      .filter(x => this.filteredCurrencies.length === 0 || this.filteredCurrencies.includes(x.currency))
-      .slice(0, 5);
+
+    if (this.filteredCurrencies.length) {
+      this.outputExchangeRates = newRates
+        .filter(x => this.filteredCurrencies.length === 0 || this.filteredCurrencies.includes(x.currency));
+    }
+    else {
+      this.outputExchangeRates = newRates
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 5);
+    }
   }
 }

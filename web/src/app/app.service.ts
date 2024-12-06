@@ -34,10 +34,6 @@ export class AppService {
     });
   }
 
-  getCurrencies(): Observable<ApiCurrencyResponse> { // TODO: remove unused method?
-    return this.http.get<ApiCurrencyResponse>(`${this.baseApiUrl}/exchangeratedata`);
-  }
-
   getExchangeRateData(): Observable<ApiCurrencyResponse> {
     return this.exchangeRateDataSubject.asObservable();
   }
